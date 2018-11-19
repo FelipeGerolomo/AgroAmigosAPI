@@ -186,6 +186,23 @@ app.get('/secure', (req, res) => {
     res.send('I am secured...')
 });
 
+app.post('/grafico/produtos', function (req, res) {
+    const idProdutos = req.body;
+    connection.getConnection(function (err, connection) {
+        if (err) {
+            res.status(500).json(err);
+        } else {
+            connection.query('select * from cotacoes where COD_PRODUTO in (?)', [idProdutos], function (err, rows, fields) {
+                if (!err) {
+                    res.status(200).json(rows);
+                } else {
+                    res.status(500).json(err);
+                }
+            });
+            connection.release();
+        }
+    });
+});
 
 app.get('/config/:user', function (req, res) {
     const user = req.params.user;

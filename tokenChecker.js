@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
       req.decoded = decoded;
       next();
     });
-  } else if (req.originalUrl == '/estados') {
+  } else if (req.originalUrl == '/estados' || req.originalUrl == '/gerar') {
     next();
   } else {
     // if there is no token
