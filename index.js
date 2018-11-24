@@ -226,6 +226,7 @@ app.get('/config/:user', function (req, res) {
 app.get('/noticias', function (req, res) {
     request.get('https://api.cognitive.microsoft.com/bing/v7.0/news/search?q=agronegocio&originalImg=true&freshness=week', { headers: { 'Ocp-Apim-Subscription-Key': 'dfadc1af341143a29cb7cd0c81702def' } }, function (error, response, body) {
         res.send(body)
+        console.log(body)
     });
 });
 
@@ -324,6 +325,7 @@ app.post('/config', (req, res) => {
 })
 
 app.get('/cotacoes/user/:id', (req, res) => {
+    console.log("cotacoes")
     const userId = req.params.id;
     const sql = '   SELECT  ' +
         '       user_config.COD_PRODUTO,  ' +
