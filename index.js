@@ -354,7 +354,7 @@ app.get('/cotacoes/user/:id', (req, res) => {
                     res.send(rows)
                 } else {
                     appData['error'] = true;
-                    appData['data'] = 'Error Occured!';
+                    appData['data'] = err;
                     res.status(400).json(appData);
                 }
             });
