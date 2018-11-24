@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 const connection = mysql.createPool({
     connectionLimit: 100,
     host: 'localhost',
-    user: 'root',
+    user: 'admin',
     password: '@Unicesumar2018',
     database: 'agroamigos',
     port: 3306,
@@ -110,7 +110,7 @@ app.post('/login', (req, res) => {
     connection.getConnection(function (err, connection) {
         if (err) {
             appData['error'] = 1;
-            appData['data'] = 'Internal Server Error';
+            appData['data'] = err;
             res.status(500).json(appData);
         } else {
             connection.query('SELECT * FROM user WHERE EMAIL = ?', [user['email']], function (err, rows, fields) {
