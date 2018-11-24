@@ -19,7 +19,7 @@ const connection = mysql.createPool({
     connectionLimit: 100,
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '@Unicesumar2018',
     database: 'agroamigos',
     port: 3306,
     debug: false,
