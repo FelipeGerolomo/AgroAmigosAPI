@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
-const cors = require('cors')
+const cors = require('cors');
+const cron = require("node-cron");
 const bodyParser = require('body-parser');
 const cheerio = require('cheerio');
 var moment = require('moment');
@@ -27,6 +28,14 @@ var tempo = { now: null, h72: null, d15: null };
 //     debug: false,
 //     multipleStatements: true
 // });
+
+gerar();
+
+cron.schedule("01 00 * * *", function () {
+    console.log("---------------------");
+    console.log("Running Cron Job");
+    gerar();
+});
 
 const connection = mysql.createPool({
     connectionLimit: 100,
@@ -292,11 +301,18 @@ function getForecast15Day(city, res) {
 app.get('/gerar', function (req, res) {
     request.get('http://www.cepea.esalq.usp.br/br/widgetproduto.js.php?fonte=arial&tamanho=10&largura=400px&corfundo=dbd6b2&cortexto=333333&corlinha=ede7bf&id_indicador%5B%5D=50&id_indicador%5B%5D=149&id_indicador%5B%5D=35&id_indicador%5B%5D=143&id_indicador%5B%5D=53&id_indicador%5B%5D=54&id_indicador%5B%5D=91&id_indicador%5B%5D=8&id_indicador%5B%5D=3&id_indicador%5B%5D=2&id_indicador%5B%5D=23&id_indicador%5B%5D=24&id_indicador%5B%5D=162&id_indicador%5B%5D=101&id_indicador%5B%5D=208&id_indicador%5B%5D=76&id_indicador%5B%5D=104&id_indicador%5B%5D=209&id_indicador%5B%5D=119&id_indicador%5B%5D=75&id_indicador%5B%5D=100&id_indicador%5B%5D=103&id_indicador%5B%5D=181&id_indicador%5B%5D=130&id_indicador%5B%5D=leite&id_indicador%5B%5D=72&id_indicador%5B%5D=77&id_indicador%5B%5D=305-BA&id_indicador%5B%5D=305-CE&id_indicador%5B%5D=305-MS&id_indicador%5B%5D=305-MT&id_indicador%5B%5D=305-PR&id_indicador%5B%5D=305-RS&id_indicador%5B%5D=305-SP&id_indicador%5B%5D=159&id_indicador%5B%5D=12&id_indicador%5B%5D=92&id_indicador%5B%5D=129-10&id_indicador%5B%5D=129-6&id_indicador%5B%5D=129-4&id_indicador%5B%5D=129-5&id_indicador%5B%5D=129-1&id_indicador%5B%5D=124&id_indicador%5B%5D=178&id_indicador%5B%5D=179', function (error, response, body) {
         console.log('error:', error);
-        extractCotacoes(body, res);
+        extractCotacoes(body);
     });
 });
 
-function extractCotacoes(html, res) {
+function gerar() {
+    request.get('http://www.cepea.esalq.usp.br/br/widgetproduto.js.php?fonte=arial&tamanho=10&largura=400px&corfundo=dbd6b2&cortexto=333333&corlinha=ede7bf&id_indicador%5B%5D=50&id_indicador%5B%5D=149&id_indicador%5B%5D=35&id_indicador%5B%5D=143&id_indicador%5B%5D=53&id_indicador%5B%5D=54&id_indicador%5B%5D=91&id_indicador%5B%5D=8&id_indicador%5B%5D=3&id_indicador%5B%5D=2&id_indicador%5B%5D=23&id_indicador%5B%5D=24&id_indicador%5B%5D=162&id_indicador%5B%5D=101&id_indicador%5B%5D=208&id_indicador%5B%5D=76&id_indicador%5B%5D=104&id_indicador%5B%5D=209&id_indicador%5B%5D=119&id_indicador%5B%5D=75&id_indicador%5B%5D=100&id_indicador%5B%5D=103&id_indicador%5B%5D=181&id_indicador%5B%5D=130&id_indicador%5B%5D=leite&id_indicador%5B%5D=72&id_indicador%5B%5D=77&id_indicador%5B%5D=305-BA&id_indicador%5B%5D=305-CE&id_indicador%5B%5D=305-MS&id_indicador%5B%5D=305-MT&id_indicador%5B%5D=305-PR&id_indicador%5B%5D=305-RS&id_indicador%5B%5D=305-SP&id_indicador%5B%5D=159&id_indicador%5B%5D=12&id_indicador%5B%5D=92&id_indicador%5B%5D=129-10&id_indicador%5B%5D=129-6&id_indicador%5B%5D=129-4&id_indicador%5B%5D=129-5&id_indicador%5B%5D=129-1&id_indicador%5B%5D=124&id_indicador%5B%5D=178&id_indicador%5B%5D=179', function (error, response, body) {
+        console.log('error:', error);
+        extractCotacoes(body);
+    });
+}
+
+function extractCotacoes(html) {
     const $ = cheerio.load(html);
     const cotacoes = [];
     let data;
@@ -321,10 +337,10 @@ function extractCotacoes(html, res) {
             data,
         ]
     });
-    saveCotacoes(cotacoes, res);
+    saveCotacoes(cotacoes);
 }
 
-function saveCotacoes(cotacoes, res) {
+function saveCotacoes(cotacoes) {
     const appData = {
         'error': 1,
         'data': ''
@@ -333,16 +349,16 @@ function saveCotacoes(cotacoes, res) {
         if (err) {
             appData['error'] = 1;
             appData['data'] = 'Internal Server Error';
-            res.status(500).json(appData);
+            //res.status(500).json(appData);
         } else {
             connection.query('INSERT IGNORE INTO AUX_COTACOES (DC_PRODUTO,DC_PRECO,DC_UNIDADE,DT_DATA) VALUES ?', [cotacoes], function (err, rows, fields) {
                 if (!err) {
                     appData.error = 0;
                     appData['data'] = 'User registered successfully!';
-                    res.status(201).json(appData);
+                    //res.status(201).json(appData);
                 } else {
                     appData['data'] = 'Error Occured!';
-                    res.status(400).json(err);
+                    //res.status(400).json(err);
                 }
             });
             connection.release();
