@@ -31,7 +31,7 @@ const connection = mysql.createPool({
 
 gerar();
 
-cron.schedule("01 00 * * *", function () {
+cron.schedule("00 17 * * *", function () {
     console.log("---------------------");
     console.log("Running Cron Job");
     gerar();
