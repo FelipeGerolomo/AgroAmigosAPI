@@ -338,6 +338,7 @@ function extractCotacoes(html) {
         ]
     });
     saveCotacoes(cotacoes);
+    console.log(cotacoes)
 }
 
 function saveCotacoes(cotacoes) {
@@ -355,9 +356,11 @@ function saveCotacoes(cotacoes) {
                 if (!err) {
                     appData.error = 0;
                     appData['data'] = 'User registered successfully!';
+                   
                     //res.status(201).json(appData);
                 } else {
                     appData['data'] = 'Error Occured!';
+                    console.log(err)
                     //res.status(400).json(err);
                 }
             });
