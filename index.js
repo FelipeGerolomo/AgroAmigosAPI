@@ -18,16 +18,16 @@ app.use(bodyParser.json());
 
 var tempo = { now: null, h72: null, d15: null };
 
-// const connection = mysql.createPool({
-//     connectionLimit: 100,
-//     host: 'localhost',
-//     user: 'admin',
-//     password: '@Unicesumar2018',
-//     database: 'agroamigos',
-//     port: 3306,
-//     debug: false,
-//     multipleStatements: true
-// });
+const connection = mysql.createPool({
+    connectionLimit: 100,
+    host: 'localhost',
+    user: 'admin',
+    password: '@Unicesumar2018',
+    database: 'agroamigos',
+    port: 3306,
+    debug: false,
+    multipleStatements: true
+});
 
 gerar();
 
@@ -37,16 +37,16 @@ cron.schedule("01 00 * * *", function () {
     gerar();
 });
 
-const connection = mysql.createPool({
-    connectionLimit: 100,
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'agroamigos',
-    port: 3306,
-    debug: false,
-    multipleStatements: true
-});
+// const connection = mysql.createPool({
+//     connectionLimit: 100,
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'root',
+//     database: 'agroamigos',
+//     port: 3306,
+//     debug: false,
+//     multipleStatements: true
+// });
 
 app.get('/estados', function (req, res) {
     request.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados', function (error, response, body) {
