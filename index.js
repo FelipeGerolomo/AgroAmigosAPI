@@ -354,7 +354,7 @@ function saveCotacoes(cotacoes) {
             appData['data'] = 'Internal Server Error';
             //res.status(500).json(appData);
         } else {
-            connection.query('INSERT IGNORE INTO AUX_COTACOES (DC_PRODUTO,DC_PRECO,DC_UNIDADE,DT_DATA) VALUES ?', [cotacoes], function (err, rows, fields) {
+            connection.query('INSERT IGNORE INTO aux_cotacoes (DC_PRODUTO,DC_PRECO,DC_UNIDADE,DT_DATA) VALUES ?', [cotacoes], function (err, rows, fields) {
                 if (!err) {
                     appData.error = 0;
                     appData['data'] = 'User registered successfully!';
