@@ -282,6 +282,7 @@ let response_handler = function (response) {
                  console.log(header + ": " + response.headers[header]);
         body = JSON.stringify(JSON.parse(body), null, '  ');
         console.log('\nJSON Response:\n');
+        console.log(body)
         res.send(body)
     });
     response.on('error', function (e) {
@@ -294,7 +295,7 @@ let bing_news_search = function (search) {
   let request_params = {
         method : 'GET',
         hostname : host,
-        path : path + '?q=' + encodeURIComponent(search) + '&originalImg=true&freshness=week&cc=pt-BR&setLang=pt-BR',
+        path : path + '?q=' + encodeURIComponent(search) + '&originalImg=true&freshness=week&setLang=pt-BR',
         headers : {
             'Ocp-Apim-Subscription-Key' : subscriptionKey,
         }
