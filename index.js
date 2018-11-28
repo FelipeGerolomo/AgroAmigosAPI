@@ -295,7 +295,7 @@ let bing_news_search = function (search) {
   let request_params = {
         method : 'GET',
         hostname : host,
-        path : path + '?q=' + encodeURIComponent(search) + '&originalImg=true&freshness=week&setLang=pt-BR',
+        path : path + '?q=' + encodeURIComponent(search) + '&originalImg=true&freshness=week',
         headers : {
             'Ocp-Apim-Subscription-Key' : subscriptionKey,
         }
