@@ -294,11 +294,13 @@ let bing_news_search = function (search) {
   let request_params = {
         method : 'GET',
         hostname : host,
-        path : path + '?q=' + encodeURIComponent(search),
+        path : path + '?q=' + encodeURIComponent(search) + '&originalImg=true&freshness=week&cc=pt-BR&setLang=pt-BR',
         headers : {
             'Ocp-Apim-Subscription-Key' : subscriptionKey,
         }
     };
+
+    console.log(request_params.path)
 
     let req = https.request(request_params, response_handler);
     req.end();
