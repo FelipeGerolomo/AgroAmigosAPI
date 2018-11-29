@@ -30,7 +30,7 @@ const connection = mysql.createPool({
     multipleStatements: true
 });
 
-//gerar();
+gerar();
 
 cron.schedule("00 17 * * *", function () {
     console.log("---------------------");
