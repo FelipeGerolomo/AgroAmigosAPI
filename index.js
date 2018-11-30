@@ -80,6 +80,16 @@ app.get('/produtos', function (req, res) {
     });
 });
 
+function encrypt(pass) {
+    var salt = bcrypt.genSaltSync(saltRounds);
+    var hash = bcrypt.hashSync(pass, salt);
+    return hash;
+}
+
+function checkSenha(senha, hash) {
+    bcrypt.compareSync(senha, hash)
+}
+
 app.post('/register', function (req, res) {
     console.log(req.body)
     const appData = {
@@ -87,10 +97,11 @@ app.post('/register', function (req, res) {
         'data': ''
     };
 
-
+    var senha = req.body.senha;
+    senha = encrypt(senha)
     const userData = {
         "EMAIL": req.body.email,
-        "SENHA": req.body.senha,
+        "SENHA": senha,
         "NOME": req.body.nome,
         "UF": req.body.uf,
         "CIDADE": req.body.cidade,
@@ -126,6 +137,7 @@ app.post('/register', function (req, res) {
 app.post('/login', (req, res) => {
     const postData = req.body;
     console.log(postData)
+
     const user = {
         "email": postData.email,
         "senha": postData.senha
@@ -145,7 +157,7 @@ app.post('/login', (req, res) => {
                 } else {
                     if (rows.length > 0) {
                         console.log(rows)
-                        if (rows[0].SENHA == user.senha) {
+                        if (checkSenha(user.senha,rows[0].SENHA)) {
                             const token = jwt.sign(user, config.secret, { expiresIn: config.tokenLife })
                             const refreshToken = jwt.sign(user, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
                             const response = {
