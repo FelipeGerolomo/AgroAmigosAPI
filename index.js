@@ -148,18 +148,21 @@ app.post('/login', (req, res) => {
     var appData = {};
     connection.getConnection(function (err, connection) {
         if (err) {
+            console.log(err)
             appData['error'] = 1;
             appData['data'] = err;
             res.status(500).json(appData);
         } else {
             connection.query('SELECT * FROM user WHERE EMAIL = ?', [user['email']], function (err, rows, fields) {
                 if (err) {
+                    console.log(err)
                     appData.error = 1;
                     appData['data'] = 'Error Occured!';
                     res.status(400).json(appData);
                 } else {
                     if (rows.length > 0) {
                         console.log(rows)
+                        console.log(checkSenha(user.senha,rows[0].SENHA)
                         if (checkSenha(user.senha,rows[0].SENHA)) {
                             const token = jwt.sign(user, config.secret, { expiresIn: config.tokenLife })
                             const refreshToken = jwt.sign(user, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
