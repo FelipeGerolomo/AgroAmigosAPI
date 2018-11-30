@@ -162,7 +162,7 @@ app.post('/login', (req, res) => {
                 } else {
                     if (rows.length > 0) {
                         console.log(rows)
-                        console.log(checkSenha(user.senha,rows[0].SENHA)
+                        console.log(checkSenha(user.senha,rows[0].SENHA))
                         if (checkSenha(user.senha,rows[0].SENHA)) {
                             const token = jwt.sign(user, config.secret, { expiresIn: config.tokenLife })
                             const refreshToken = jwt.sign(user, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
