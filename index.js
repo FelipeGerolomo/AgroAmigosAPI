@@ -163,7 +163,7 @@ app.post('/login', (req, res) => {
                     if (rows.length > 0) {
                         console.log(rows)
                         console.log(checkSenha(user.senha,rows[0].SENHA))
-                        if (checkSenha(user.senha,rows[0].SENHA)) {
+                        if (checkSenha(user.senha,rows[0].SENHA) == true) {
                             const token = jwt.sign(user, config.secret, { expiresIn: config.tokenLife })
                             const refreshToken = jwt.sign(user, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
                             const response = {
@@ -181,12 +181,14 @@ app.post('/login', (req, res) => {
                                 "error": err,
                                 "status": "FAIL",
                             }
-                            res.status(400).json(response);
+                            console.log(response)
+                            res.status(200).json(response);
                         }
                     } else {
                         const response = {
                             "status": "FAIL",
                         }
+                        console.log(response)
                         res.status(200).json(response);
                     }
                 }
