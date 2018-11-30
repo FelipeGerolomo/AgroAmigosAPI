@@ -177,9 +177,11 @@ app.post('/login', (req, res) => {
                             tokenList[refreshToken] = response
                             res.status(200).json(response);
                         } else {
-                            appData.error = 1;
-                            appData['data'] = 'Email and Password does not match';
-                            res.status(204).json(appData);
+                            const response = {
+                                "error": err,
+                                "status": "FAIL",
+                            }
+                            res.status(400).json(response);
                         }
                     } else {
                         const response = {
