@@ -463,7 +463,7 @@ app.post('/config', (req, res) => {
 app.get('/cotacoes/user/:id', (req, res) => {
     console.log("cotacoes")
     const userId = req.params.id;
-    const sql = 'SELECT user_config.COD_PRODUTO, cotacoes.DC_PRODUTO, cotacoes.DC_PRECO, cotacoes.DC_UNIDADE, max(cotacoes.DT_DATA) as DT_DATA FROM user_config INNER JOIN ( select * from cotacoes c1 where c1.dt_data = (select max(dt_data) from cotacoes c2 where c2.cod_produto = c1.cod_produto) ) cotacoes ON user_config.COD_PRODUTO = cotacoes.COD_PRODUTO WHERE user_config.COD_USER = 1 group by cotacoes.DC_PRODUTO;'
+    const sql = 'SELECT user_config.COD_PRODUTO, cotacoes.DC_PRODUTO, cotacoes.DC_PRECO, cotacoes.DC_UNIDADE, max(cotacoes.DT_DATA) as DT_DATA FROM user_config INNER JOIN ( select * from cotacoes c1 where c1.dt_data = (select max(dt_data) from cotacoes c2 where c2.cod_produto = c1.cod_produto) ) cotacoes ON user_config.COD_PRODUTO = cotacoes.COD_PRODUTO WHERE user_config.COD_USER = ? group by cotacoes.DC_PRODUTO;'
     console.log(sql)
     const appData = {
         'error': 1,
