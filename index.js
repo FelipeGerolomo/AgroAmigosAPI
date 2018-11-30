@@ -99,6 +99,7 @@ app.post('/register', function (req, res) {
 
     var senha = req.body.senha;
     senha = encrypt(senha)
+
     const userData = {
         "EMAIL": req.body.email,
         "SENHA": senha,
@@ -107,7 +108,7 @@ app.post('/register', function (req, res) {
         "CIDADE": req.body.cidade,
         "TELEFONE": req.body.telefone
     }
-
+    console.log(userData)
     connection.getConnection(function (err, connection) {
         if (err) {
             console.log(err)
