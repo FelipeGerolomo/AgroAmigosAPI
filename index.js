@@ -89,7 +89,7 @@ function encrypt(pass) {
 }
 
 function checkSenha(senha, hash) {
-    bcrypt.compareSync(senha, hash)
+    return bcrypt.compareSync(senha, hash)
 }
 
 app.post('/register', function (req, res) {
